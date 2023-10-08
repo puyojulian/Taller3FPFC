@@ -46,16 +46,35 @@ package object ManiobrasTrenes {
     }
 
     m match {
-      case Uno(n) => moverUno(n,e)
-      case Dos(n) => moverDos(n,e)
+      case Uno(n) => moverUno(n, e)
+      case Dos(n) => moverDos(n, e)
     }
   }
 
-  def aplicarMovimientos(e: Estado, movs: Maniobra): List[Estado] = {
-    List(new Estado(Nil,Nil,Nil))
+  def aplicarMovimiento1(e: Estado, m: Movimiento): Estado = m match {
+    case Uno(n) => if (n > 0) {
+      (e._1 take (e._1.length - n), e._2 ++ e._1 drop (e._1.length - n), e._3)
+    } else if (n < 0) {
+      (e._1 ++ e._2 take (n.abs), e._2 drop n.abs, e._3)
+    } else
+      (e._1, e._2, e._3)
+    case Dos(n) => if (n > 0) {
+      (e._1 take (e._1.length - n), e._2, e._3 ++ e._1 drop (e._1.length - n))
+    } else if (n < 0) {
+      (e._1 ++ e._3 take (n.abs), e._2, e._3 drop n.abs)
+    } else {
+      (e._1, e._2, e._3)
+    }
   }
 
-  def definirManiobra(t1: Tren, t2: Tren): Maniobra = {
-    List(Uno(0), Dos(0))
-  }
+/*
+def aplicarMovimientos(e: Estado, movs: Maniobra): List[Estado] = {
+  List(new Estado(Nil,Nil,Nil))
+}
+
+def definirManiobra(t1: Tren, t2: Tren): Maniobra = {
+  List(Uno(0), Dos(0))
+}
+ */
+
 }
