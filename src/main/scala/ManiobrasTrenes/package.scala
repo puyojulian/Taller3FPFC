@@ -16,7 +16,39 @@ package object ManiobrasTrenes {
   type Maniobra = List[Movimiento]
 
   def aplicarMovimiento(e: Estado, m: Movimiento): Estado = {
-    new Estado(Nil,Nil,Nil)
+    def moverUno(n: Int, estado: Estado): Estado = {
+      if (n > 0)
+        if (n <= estado._1.length)
+          moverUno(n - 1, (estado._1.init, estado._1.last :: estado._2, estado._3))
+        else
+          moverUno(estado._1.length - 1, (estado._1.init, estado._1.last :: estado._2, estado._3))
+      else if (n < 0)
+        if (n.abs <= estado._2.length)
+          moverUno(n + 1, (estado._1 ++ List(estado._2.head), estado._2.tail, estado._3))
+        else
+          moverUno(estado._2.length - 1, (estado._1 ++ List(estado._2.head), estado._2.tail, estado._3))
+      else
+        estado
+    }
+
+    def moverDos(n: Int, estado: Estado): Estado = {
+      if (n > 0)
+        if (n <= estado._1.length)
+          moverDos(n - 1, (estado._1.init, estado._2, estado._1.last :: estado._3))
+        else
+          moverDos(estado._1.length - 1, (estado._1.init, estado._2, estado._1.last :: estado._3))
+      else if (n < 0)
+        if (n.abs <= estado._3.length)
+          moverDos(n + 1, (estado._1 ++ List(estado._3.head), estado._2, estado._3.tail))
+        else
+          moverDos(estado._3.length - 1, (estado._1 ++ List(estado._3.head), estado._2, estado._3.tail))
+      else estado
+    }
+
+    m match {
+      case Uno(n) => moverUno(n,e)
+      case Dos(n) => moverDos(n,e)
+    }
   }
 
   def aplicarMovimientos(e: Estado, movs: Maniobra): List[Estado] = {
