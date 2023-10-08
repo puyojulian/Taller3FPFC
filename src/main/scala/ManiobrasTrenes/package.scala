@@ -68,19 +68,53 @@ package object ManiobrasTrenes {
   }
 
 
-def aplicarMovimientos(e: Estado, movs: Maniobra): List[Estado] = {
-  def listaDeEstados(estado: Estado, maniobra: Maniobra): List[Estado] = {
-    maniobra match {
-      case x :: xs => aplicarMovimiento(estado, x) :: listaDeEstados(aplicarMovimiento(estado, x), xs)
-      case Nil => Nil
+  def aplicarMovimientos(e: Estado, movs: Maniobra): List[Estado] = {
+    def listaDeEstados(estado: Estado, maniobra: Maniobra): List[Estado] = {
+      maniobra match {
+        case x :: xs => aplicarMovimiento(estado, x) :: listaDeEstados(aplicarMovimiento(estado, x), xs)
+        case Nil => Nil
+      }
     }
+    e::listaDeEstados(e,movs)
   }
-  e::listaDeEstados(e,movs)
-}
 
-def definirManiobra(t1: Tren, t2: Tren): Maniobra = {
-  List(Uno(0), Dos(0))
-}
+  def definirManiobra(t1: Tren, t2: Tren): Maniobra = {
 
+    def listaDeMovimientos(e: Estado, v:Vagon): List[Movimiento] = {
+      if (t2.indexOf(v) == e._1.indexOf(v)) {
+        if(e._3.nonEmpty)
+          Dos(-e._3.length) :: listaDeMovimientos(aplicarMovimiento(e, Dos(-e._3.length)), v)
+        else
+          Nil
+      }
+      else {
+        if (e._1 contains v) {
+          if (e._1.indexOf(v) == e._1.indexOf(e._1.last)) {
+//            println("something")
+            Uno(1) :: listaDeMovimientos(aplicarMovimiento(e, Uno(1)), v)
+          } else {
+            val cuantos = e._1.length - (e._1.indexOf(v) + 1)
+//            println(cuantos)
+            Dos(cuantos) :: listaDeMovimientos(aplicarMovimiento(e, Dos(cuantos)), v)
+          }
+        }
+        else if ((e._2 contains v) && e._1.length == t2.indexOf(v)) {
+          Uno(-1) :: listaDeMovimientos(aplicarMovimiento(e, Uno(-1)), v)
+        } else
+          Dos(e._1.length - t2.indexOf(v)) :: listaDeMovimientos(aplicarMovimiento(e, Dos(e._1.length - t2.indexOf(v))), v)
+      }
+    }
 
+    val estado = (t1,Nil,Nil)
+    def listarMovimientos(tren: Tren, e: Estado): Maniobra = {
+      tren match {
+        case x :: xs => {
+          val listaMovimientos = listaDeMovimientos(e, x: Vagon)
+          listaMovimientos ++ listarMovimientos(xs, aplicarMovimientos(e, listaMovimientos).last)
+        }
+        case Nil => Nil
+      }
+    }
+    listarMovimientos(t2,estado)
+  }
 }
