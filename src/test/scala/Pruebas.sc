@@ -25,3 +25,12 @@ aplicarMovimientos(e, List(Uno(1), Dos(1), Uno(-2)))
 
 definirManiobra(List('a', 'b', 'c', 'd') , List('d', 'b', 'c', 'a'))
 aplicarMovimientos((List('a', 'b', 'c', 'd'),Nil,Nil),definirManiobra(List('a', 'b', 'c', 'd') , List('d', 'b', 'c', 'a')))
+
+definirManiobra(List(1, 2, 3, 4, 5) , List(5, 4, 3, 2, 1))
+aplicarMovimientos((List(1, 2, 3, 4, 5),Nil,Nil),definirManiobra(List(1, 2, 3, 4, 5) , List(5, 4, 3, 2, 1)))
+
+definirManiobra1(List('a', 'b', 'c', 'd') , List('d', 'b', 'c', 'a'))
+aplicarMovimientos((List('a', 'b', 'c', 'd'),Nil,Nil),definirManiobra1(List('a', 'b', 'c', 'd') , List('d', 'b', 'c', 'a')))
+
+definirManiobra1(List(1, 2, 3, 4, 5) , List(5, 4, 3, 2, 1))
+aplicarMovimientos((List(1, 2, 3, 4, 5),Nil,Nil),definirManiobra1(List(1, 2, 3, 4, 5) , List(5, 4, 3, 2, 1)))

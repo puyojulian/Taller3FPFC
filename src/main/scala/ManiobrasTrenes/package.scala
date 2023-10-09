@@ -124,4 +124,50 @@ package object ManiobrasTrenes {
     }
     listarMovimientos(t2,estado)
   }
+
+  def definirManiobra1(t1: Tren, t2: Tren): Maniobra = {
+
+    def listaDeMovimientos(e: Estado, v: Vagon): List[Movimiento] = {
+      t2.indexOf(v) == e._1.indexOf(v) match {
+        case true => e._3.nonEmpty match {
+          case true => Dos(-e._3.length) :: listaDeMovimientos(aplicarMovimiento(e, Dos(-e._3.length)), v)
+          case false => Nil
+        }
+        case false => {
+          e._1 contains v match {
+            case true => e._1.indexOf(v) == e._1.indexOf(e._1.last) match {
+              case true => Uno(1) :: listaDeMovimientos(aplicarMovimiento(e, Uno(1)), v)
+              case false => {
+                val cuantos = e._1.length - (e._1.indexOf(v) + 1)
+                Dos(cuantos) :: listaDeMovimientos(aplicarMovimiento(e, Dos(cuantos)), v)
+              }
+            }
+            case false => (e._2 contains v) match {
+              case true => e._1.length == t2.indexOf(v) match {
+                case true => Uno(-1) :: listaDeMovimientos(aplicarMovimiento(e, Uno(-1)), v)
+                case false => {
+                  val cuantos = e._1.length - t2.indexOf(v)
+                  Dos(cuantos) :: listaDeMovimientos(aplicarMovimiento(e, Dos(cuantos)), v)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    val estado = (t1, Nil, Nil)
+
+    def listarMovimientos(tren: Tren, e: Estado): Maniobra = {
+      tren match {
+        case x :: xs => {
+          val listaMovimientos = listaDeMovimientos(e, x: Vagon)
+          listaMovimientos ++ listarMovimientos(xs, aplicarMovimientos(e, listaMovimientos).last)
+        }
+        case Nil => Nil
+      }
+    }
+
+    listarMovimientos(t2, estado)
+  }
 }
