@@ -52,27 +52,26 @@ package object ManiobrasTrenes {
   }
 
   def aplicarMovimiento1(e: Estado, m: Movimiento): Estado = m match {
-    case Uno(n) => if (n > 0) {
-      (e._1 take (e._1.length - n),  (e._1 drop (e._1.length - n)) ++ e._2, e._3)
-    } else if (n < 0) {
-      if (n.abs==e._2.length) {
-        (e._1 ++ (e._2 take (n.abs+1)), e._2 drop n.abs, e._3)
-      } else {
-        ( e._1 ++ (e._2 take (n.abs)), e._2 drop n.abs, e._3)
-      }
-    } else
-      (e._1, e._2, e._3)
-    case Dos(n) => if (n > 0) {
-      (e._1 take (e._1.length - n), e._2,  (e._1 drop (e._1.length - n)) ++ e._3)
-    } else if (n < 0) {
-      if (n.abs==e._3.length) {
-        ( e._1++ (e._3 take (n.abs+1)), e._2, e._3 drop n.abs)
-      } else {
-        ( e._1 ++ (e._3 take (n.abs)), e._2, e._3 drop n.abs)
-      }
-    } else {
-      (e._1, e._2, e._3)
-    }
+    case Uno(n) =>
+      if (n > 0)
+        (e._1 take (e._1.length - n),  (e._1 drop (e._1.length - n)) ++ e._2, e._3)
+      else if (n < 0)
+        if (n.abs==e._2.length)
+          (e._1 ++ (e._2 take (n.abs+1)), e._2 drop n.abs, e._3)
+        else
+          ( e._1 ++ (e._2 take (n.abs)), e._2 drop n.abs, e._3)
+      else
+        (e._1, e._2, e._3)
+    case Dos(n) =>
+      if (n > 0)
+        (e._1 take (e._1.length - n), e._2,  (e._1 drop (e._1.length - n)) ++ e._3)
+      else if (n < 0)
+        if (n.abs==e._3.length)
+          ( e._1++ (e._3 take (n.abs+1)), e._2, e._3 drop n.abs)
+        else
+          ( e._1 ++ (e._3 take (n.abs)), e._2, e._3 drop n.abs)
+      else
+        (e._1, e._2, e._3)
   }
 
   def aplicarMovimientos(e: Estado, movs: Maniobra): List[Estado] = {
