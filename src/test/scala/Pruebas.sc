@@ -27,7 +27,7 @@ val e = (List('a', 'b'), List('c'), List('d'))
 aplicarMovimientos(e, List(Uno(1), Dos(1), Uno(-2)))
 
 definirManiobra(List('a', 'b', 'c', 'd') , List('d', 'b', 'c', 'a'))
-aplicarMovimientos((List('a', 'b', 'c', 'd'),Nil,Nil),definirManiobra(List('a', 'b', 'c', 'd') , List('d', 'b', 'c', 'a')))
-
 definirManiobra(List(1, 2, 3, 4, 5) , List(5, 4, 3, 2, 1))
+
+aplicarMovimientos((List('a', 'b', 'c', 'd'),Nil,Nil),definirManiobra(List('a', 'b', 'c', 'd') , List('d', 'b', 'c', 'a')))
 aplicarMovimientos((List(1, 2, 3, 4, 5),Nil,Nil),definirManiobra(List(1, 2, 3, 4, 5) , List(5, 4, 3, 2, 1)))
